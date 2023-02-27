@@ -19,14 +19,18 @@ TEST_PAYLOAD = [
           "url": "https://api.github.com/users/google",
           "html_url": "https://github.com/google",
           "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
+          "following_url": "https://api.github.com/users"
+          "/google/following{/other_user}",
           "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
+          "starred_url": "https://api.github.com/users/google"
+          "/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/google"
+          "/subscriptions",
           "organizations_url": "https://api.github.com/users/google/orgs",
           "repos_url": "https://api.github.com/users/google/repos",
           "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
+          "received_events_url": "https://api.github.com/users/google"
+          "/received_events",
           "type": "Organization",
           "site_admin": False
         },
@@ -35,8 +39,10 @@ TEST_PAYLOAD = [
         "fork": False,
         "url": "https://api.github.com/repos/google/episodes.dart",
         "forks_url": "https://api.github.com/repos/google/episodes.dart/forks",
-        "keys_url": "https://api.github.com/repos/google/episodes.dart/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/episodes.dart/collaborators{/collaborator}",
+        "keys_url": "https://api.github.com/repos/google/episodes.dart"
+        "/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/google/episodes.dart"
+        "/collaborators{/collaborator}",
         "teams_url": "https://api.github.com/repos/google/episodes.dart/teams",
         "hooks_url": "https://api.github.com/repos/google/episodes.dart/hooks",
         "issue_events_url": "https://api.github.com/repos/google/episodes.dart/issues/events{/number}",

@@ -1,58 +1,59 @@
 #!/usr/bin/env python3
-"""A github org client
 """
-from typing import (
-    List,
-    Dict,
-)
-
-from utils import (
-    get_json,
-    access_nested_map,
-    memoize,
-)
+Testing client.py
+"""
+import unittest
+from unittest.mock import patch, MagicMock, PropertyMock
+from parameterized import parameterized
+requests = __import__("utils").requests
+GithubOrgClient = __import__("client").GithubOrgClient
 
 
-class GithubOrgClient:
-    """A Githib org client
+class TestGithubOrgClient(unittest.TestCase):
     """
-    ORG_URL = "https://api.github.com/orgs/{org}"
+    Testing GithubOrgClient
+    """
 
-    def __init__(self, org_name: str) -> None:
-        """Init method of GithubOrgClient"""
-        self._org_name = org_name
+    @parameterized.expand([
+        ('google'),
+        ('abc')
+    ])
+    @patch('requests.get')
+    def test_org(self, org_name, mock_get_json):
+        """
+        Testing GithubOrgClient
+        """
+        instance = GithubOrgClient(org_name)
+        # Mocking the response object
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"payload": True}
 
-    @memoize
-    def org(self) -> Dict:
-        """Memoize org"""
-        return get_json(self.ORG_URL.format(org=self._org_name))
+        # Assigning the mocked response object to the mocked
+        # request.get object
+        mock_get_json.return_value = mock_response
 
-    @property
-    def _public_repos_url(self) -> str:
-        """Public repos URL"""
-        return self.org["repos_url"]
+        doc = instance.org
+        doc = instance.org
 
-    @memoize
-    def repos_payload(self) -> Dict:
-        """Memoize repos payload"""
-        return get_json(self._public_repos_url)
+        # Since the org method is decorated by @memoize
+        # the get_json function should only be executed once,
+        # hence the mocked get function is executed only once
+        mock_get_json.assert_called_once()
+        self.assertEqual(doc, {"payload": True})
 
-    def public_repos(self, license: str = None) -> List[str]:
-        """Public repos"""
-        json_payload = self.repos_payload
-        public_repos = [
-            repo["name"] for repo in json_payload
-            if license is None or self.has_license(repo, license)
-        ]
+    def test_public_repos_url(self):
+        """
+        Test GithubOrgClient._public_repos_url
+        """
+        instance = GithubOrgClient('google')
+        # Mocking the org method of GithubOrgClient, it is
+        # considered a propoerty because the @memoize decorator
+        # turns it into a property
+        with patch('client.GithubOrgClient.org',
+                   new_callable=PropertyMock) as org_mock:
+            org_mock.return_value = {"repos_url": True}
 
-        return public_repos
-
-    @staticmethod
-    def has_license(repo: Dict[str, Dict], license_key: str) -> bool:
-        """Static: has_license"""
-        assert license_key is not None, "license_key cannot be None"
-        try:
-            has_license = access_nested_map(repo, ("license", "key")) == license_key
-        except KeyError:
-            return False
-        return has_license
+            # The _public_repos_url method returns the value
+            # associated with the key "repos_url"
+            value = instance._public_repos_url
+            self.assertEqual(value, True)
